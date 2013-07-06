@@ -2,34 +2,62 @@ package com.zauberlabs.android.network;
 
 import android.content.Intent;
 import android.os.Parcelable;
+import android.support.v4.content.LocalBroadcastManager;
+
+import com.zauberlabs.android.network.receiver.Event;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.ArgumentCaptor;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
  * Created by hernan on 7/5/13.
  */
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(RobolectricTestRunner.class)
+@Config(manifest = Config.NONE)
 public class BroadcastManagerTest {
 
-    @Mock
+    public static final String STRING_PAYLOAD = "PAYLOAD";
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
+
+    private static final String EVENT_NAME = "A EVENT";
+
     private Intent intent;
-    @Mock
     private Parcelable payload;
-    @Mock
     private ArrayList<Parcelable> listPayload;
+    private LocalBroadcastManager broadcast;
+    private Event event;
+
+    private BroadcastManager manager;
+
+    @Before
+    public void setUp() {
+        intent = mock(Intent.class);
+        payload = mock(Parcelable.class);
+        listPayload = mock(ArrayList.class);
+        broadcast = mock(LocalBroadcastManager.class);
+        event = mock(Event.class);
+        when(event.getName()).thenReturn(EVENT_NAME);
+        manager = new BroadcastManager(broadcast);
+    }
 
     @Test
     public void shouldReturnSingleObject() {
@@ -53,6 +81,116 @@ public class BroadcastManagerTest {
     public void shouldReturnNullWhenNoListIsFoundWithKey() {
         when(intent.getParcelableArrayListExtra(anyString())).thenReturn(null);
         assertNull(BroadcastManager.getListPayload(intent));
+    }
+
+    @Test
+    public void shouldCreateManager() {
+        assertNotNull(new BroadcastManager(broadcast));
+    }
+
+    @Test
+    public void shouldBroadcastEventWithoutPayload() {
+        ArgumentCaptor<Intent> captor = ArgumentCaptor.forClass(Intent.class);
+        when(broadcast.sendBroadcast(captor.capture())).thenReturn(true);
+        manager.broadcast(event);
+        verify(event, atLeastOnce()).getName();
+        Intent intent = captor.getValue();
+        assertNotNull(intent);
+        assertEquals(EVENT_NAME, intent.getAction());
+    }
+
+    @Test
+    public void shouldFailToBroadcastNullEvent() {
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("Must broadcast an event");
+        manager.broadcast(null);
+    }
+
+    @Test
+    public void shouldFailToBroadcastEventWithNullName() {
+        when(event.getName()).thenReturn(null);
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("Event must have a name");
+        manager.broadcast(event);
+    }
+
+    @Test
+    public void shouldBroadcastEventWithStringPayload() {
+        ArgumentCaptor<Intent> captor = ArgumentCaptor.forClass(Intent.class);
+        when(broadcast.sendBroadcast(captor.capture())).thenReturn(true);
+        manager.broadcast(event, STRING_PAYLOAD);
+        verify(event, atLeastOnce()).getName();
+        Intent intent = captor.getValue();
+        assertNotNull(intent);
+        assertEquals(EVENT_NAME, intent.getAction());
+        assertEquals(STRING_PAYLOAD, intent.getStringExtra(BroadcastManager.SINGLE_OBJECT_PAYLOAD_KEY));
+    }
+
+    @Test
+    public void shouldFailToBroadcastNullEventWithString() {
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("Must broadcast an event");
+        manager.broadcast(null, STRING_PAYLOAD);
+    }
+
+    @Test
+    public void shouldFailToBroadcastEventWithNullNameAndString() {
+        when(event.getName()).thenReturn(null);
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("Event must have a name");
+        manager.broadcast(event, STRING_PAYLOAD);
+    }
+
+    @Test
+    public void shouldBroadcastEventWithParcelablePayload() {
+        ArgumentCaptor<Intent> captor = ArgumentCaptor.forClass(Intent.class);
+        when(broadcast.sendBroadcast(captor.capture())).thenReturn(true);
+        manager.broadcast(event, payload);
+        verify(event, atLeastOnce()).getName();
+        Intent intent = captor.getValue();
+        assertNotNull(intent);
+        assertEquals(EVENT_NAME, intent.getAction());
+    }
+
+    @Test
+    public void shouldFailToBroadcastNullEventWithParcelable() {
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("Must broadcast an event");
+        manager.broadcast(null, payload);
+    }
+
+    @Test
+    public void shouldFailToBroadcastEventWithNullNameAndParcelable() {
+        when(event.getName()).thenReturn(null);
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("Event must have a name");
+        manager.broadcast(event, payload);
+    }
+
+    @Test
+    public void shouldBroadcastEventWithParcelableListPayload() {
+        ArgumentCaptor<Intent> captor = ArgumentCaptor.forClass(Intent.class);
+        when(broadcast.sendBroadcast(captor.capture())).thenReturn(true);
+        manager.broadcast(event, listPayload);
+        verify(event, atLeastOnce()).getName();
+        Intent intent = captor.getValue();
+        assertNotNull(intent);
+        assertEquals(EVENT_NAME, intent.getAction());
+    }
+
+    @Test
+    public void shouldFailToBroadcastNullEventWithParcelableList() {
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("Must broadcast an event");
+        manager.broadcast(null, listPayload);
+    }
+
+    @Test
+    public void shouldFailToBroadcastEventWithNullNameAndParcelableList() {
+        when(event.getName()).thenReturn(null);
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("Event must have a name");
+        manager.broadcast(event, listPayload);
     }
 
 }

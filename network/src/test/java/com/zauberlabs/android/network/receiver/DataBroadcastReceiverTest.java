@@ -6,7 +6,9 @@ import android.os.Parcelable;
 
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -15,6 +17,7 @@ import org.robolectric.RobolectricTestRunner;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
@@ -26,6 +29,9 @@ import static org.mockito.Mockito.when;
  */
 @RunWith(RobolectricTestRunner.class)
 public class DataBroadcastReceiverTest {
+
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
 
     private Command<Parcelable> command;
     private Event event;
@@ -50,6 +56,20 @@ public class DataBroadcastReceiverTest {
     public void shouldBuildReceiverWithCommandAndEvent() {
         DataBroadcastReceiver receiver = new DataBroadcastReceiver(command, event);
         assertNotNull(receiver);
+    }
+
+    @Test
+    public void shouldFailWhenCommandIsNull() {
+        expectedException.expect(NullPointerException.class);
+        DataBroadcastReceiver receiver = new DataBroadcastReceiver(null, event);
+        assertNull(receiver);
+    }
+
+    @Test
+    public void shouldFailWhenEventIsNull() {
+        expectedException.expect(NullPointerException.class);
+        DataBroadcastReceiver receiver = new DataBroadcastReceiver(command, null);
+        assertNull(receiver);
     }
 
     @Test

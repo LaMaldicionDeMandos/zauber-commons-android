@@ -5,7 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Parcelable;
 
+import com.google.common.base.Preconditions;
 import com.zauberlabs.android.network.BroadcastManager;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Created by hernan on 5/7/13.
@@ -16,6 +19,8 @@ public class DataBroadcastReceiver<T extends Parcelable> extends BroadcastReceiv
     private Event event;
 
     public DataBroadcastReceiver(Command<T> command, Event event) {
+        checkNotNull(command);
+        checkNotNull(event);
         this.command = command;
         this.event = event;
     }

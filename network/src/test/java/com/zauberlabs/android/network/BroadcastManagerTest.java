@@ -9,6 +9,9 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Matchers.anyString;
@@ -25,6 +28,8 @@ public class BroadcastManagerTest {
     private Intent intent;
     @Mock
     private Parcelable payload;
+    @Mock
+    private ArrayList<Parcelable> listPayload;
 
     @Test
     public void shouldReturnSingleObject() {
@@ -37,4 +42,17 @@ public class BroadcastManagerTest {
         when(intent.getParcelableExtra(anyString())).thenReturn(null);
         assertNull(BroadcastManager.getSingleObjectPayload(intent));
     }
+
+    @Test
+    public void shouldReturnList() {
+        when(intent.getParcelableArrayListExtra(eq(BroadcastManager.LIST_PAYLOAD_KEY))).thenReturn(listPayload);
+        assertEquals(listPayload, BroadcastManager.getListPayload(intent));
+    }
+
+    @Test
+    public void shouldReturnNullWhenNoListIsFoundWithKey() {
+        when(intent.getParcelableArrayListExtra(anyString())).thenReturn(null);
+        assertNull(BroadcastManager.getListPayload(intent));
+    }
+
 }

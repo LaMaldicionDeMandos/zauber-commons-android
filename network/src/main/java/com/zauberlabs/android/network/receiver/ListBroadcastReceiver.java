@@ -5,20 +5,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Parcelable;
 
-import com.google.common.base.Preconditions;
 import com.zauberlabs.android.network.BroadcastManager;
+
+import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * Created by hernan on 5/7/13.
+ * Created by hernan on 7/5/13.
  */
-public class DataBroadcastReceiver<T extends Parcelable> extends BroadcastReceiver implements EventReceiver {
+public class ListBroadcastReceiver<T extends Parcelable> extends BroadcastReceiver implements EventReceiver {
 
-    private Command<T> command;
-    private Event event;
+    private final ListCommand<T> command;
+    private final Event event;
 
-    public DataBroadcastReceiver(Command<T> command, Event event) {
+    public ListBroadcastReceiver(ListCommand<T> command, Event event) {
         checkNotNull(command);
         checkNotNull(event);
         this.command = command;
@@ -32,8 +33,7 @@ public class DataBroadcastReceiver<T extends Parcelable> extends BroadcastReceiv
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        T payload = BroadcastManager.getSingleObjectPayload(intent);
+        List<T> payload = BroadcastManager.getListPayload(intent);
         command.execute(context, payload);
     }
-
 }

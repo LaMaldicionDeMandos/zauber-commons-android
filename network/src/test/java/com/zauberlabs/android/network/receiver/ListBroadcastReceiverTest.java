@@ -4,17 +4,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Parcelable;
 
-
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -26,67 +26,67 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
- * Created by hernan on 5/7/13.
+ * Created by hernan on 7/5/13.
  */
 @RunWith(RobolectricTestRunner.class)
 @Config(manifest = Config.NONE)
-public class DataBroadcastReceiverTest {
+public class ListBroadcastReceiverTest {
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
 
-    private Command<Parcelable> command;
+    private ListCommand<Parcelable> command;
     private Event event;
     private Intent intent;
     private Context context;
-    private Parcelable payload;
+    private ArrayList<Parcelable> payload;
 
-    private DataBroadcastReceiver receiver;
+    private ListBroadcastReceiver receiver;
 
     @Before
     public void setUp() throws Exception {
-        command = mock(Command.class);
+        command = mock(ListCommand.class);
         event = mock(Event.class);
         intent = mock(Intent.class);
         context = mock(Context.class);
-        payload = mock(Parcelable.class);
-        when(intent.getParcelableExtra(anyString())).thenReturn(payload);
-        receiver = new DataBroadcastReceiver(command, event);
+        payload = mock(ArrayList.class);
+        receiver = new ListBroadcastReceiver(command, event);
     }
 
     @Test
-    public void shouldBuildReceiverWithCommandAndEvent() {
-        DataBroadcastReceiver receiver = new DataBroadcastReceiver(command, event);
+    public void shouldBuildReceiver() {
+        ListBroadcastReceiver receiver = new ListBroadcastReceiver(command, event);
         assertNotNull(receiver);
     }
 
     @Test
     public void shouldFailWhenCommandIsNull() {
         expectedException.expect(NullPointerException.class);
-        DataBroadcastReceiver receiver = new DataBroadcastReceiver(null, event);
+        ListBroadcastReceiver receiver = new ListBroadcastReceiver(null, event);
         assertNull(receiver);
     }
 
     @Test
     public void shouldFailWhenEventIsNull() {
         expectedException.expect(NullPointerException.class);
-        DataBroadcastReceiver receiver = new DataBroadcastReceiver(command, null);
+        ListBroadcastReceiver receiver = new ListBroadcastReceiver(command, null);
         assertNull(receiver);
     }
 
     @Test
-    public void shouldReturnEventWhenAsked() {
+    public void shouldReturnEvent() {
         assertEquals(event, receiver.getEvent());
     }
 
     @Test
-    public void shouldObtainPayloadFromIntentOnReceive() {
+    public void shouldObtainListFromIntentOnReceive() {
         receiver.onReceive(context, intent);
-        verify(intent).getParcelableExtra(anyString());
+        verify(intent).getParcelableArrayListExtra(anyString());
     }
 
     @Test
-    public void shouldCallCommandWithPayload() {
+    public void shouldCallCommandOnReceive() {
+        when(intent.getParcelableArrayListExtra(anyString())).thenReturn(payload);
         receiver.onReceive(context, intent);
         verify(command).execute(eq(context), eq(payload));
     }

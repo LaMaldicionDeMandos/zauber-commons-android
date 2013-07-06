@@ -1,11 +1,13 @@
 package com.zauberlabs.android.network;
 
+import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Parcelable;
 import android.support.v4.content.LocalBroadcastManager;
 
-import com.google.common.base.Preconditions;
 import com.zauberlabs.android.network.receiver.Event;
+import com.zauberlabs.android.network.receiver.EventReceiver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +26,14 @@ public class BroadcastManager {
 
     public BroadcastManager(LocalBroadcastManager broadcast) {
         this.broadcast = broadcast;
+    }
+
+    public <T extends BroadcastReceiver & EventReceiver> void register(T receiver) {
+        broadcast.registerReceiver(receiver, new IntentFilter(receiver.getEvent().getName()));
+    }
+
+    public <T extends BroadcastReceiver> void unregister(T receiver) {
+        broadcast.unregisterReceiver(receiver);
     }
 
     public void broadcast(Event event) {
@@ -62,4 +72,5 @@ public class BroadcastManager {
         checkArgument(event.getName() != null, "Event must have a name");
         return new Intent(event.getName());
     }
+
 }

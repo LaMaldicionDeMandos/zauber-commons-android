@@ -23,6 +23,12 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>android.support</groupId>
+            <artifactId>compatibility-v4</artifactId>
+            <version>11</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>com.octo.android.robospice</groupId>
             <artifactId>robospice-google-http-client</artifactId>
             <version>1.4.4</version>

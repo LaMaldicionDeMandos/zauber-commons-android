@@ -5,12 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Parcelable;
 
+import com.zauberlabs.android.network.BroadcastManager;
+
 /**
  * Created by hernan on 5/7/13.
  */
 public class DataBroadcastReceiver<T extends Parcelable> extends BroadcastReceiver implements EventReceiver {
 
-    public static final String DATA_PAYLOAD_KEY = "DATA";
     private Command<T> command;
     private Event event;
 
@@ -25,11 +26,8 @@ public class DataBroadcastReceiver<T extends Parcelable> extends BroadcastReceiv
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        T payload = getPayloadAsData(intent);
+        T payload = BroadcastManager.getSingleObjectPayload(intent);
         command.execute(context, payload);
     }
 
-    public static <T extends Parcelable> T getPayloadAsData(Intent intent) {
-        return intent.getParcelableExtra(DATA_PAYLOAD_KEY);
-    }
 }

@@ -62,6 +62,7 @@
   <modules>
     <module>network</module>
     <module>groupable</module>
+    <module>paginator</module>
   </modules>
 
   <dependencyManagement>
@@ -148,4 +149,3 @@
     </snapshotRepository>
   </distributionManagement>
 </project>
-

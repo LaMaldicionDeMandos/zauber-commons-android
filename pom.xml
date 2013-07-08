@@ -63,6 +63,7 @@
     <module>network</module>
     <module>groupable</module>
     <module>paginator</module>
+    <module>examples</module>
   </modules>
 
   <dependencyManagement>

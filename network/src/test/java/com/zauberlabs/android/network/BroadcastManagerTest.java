@@ -5,6 +5,7 @@ import android.content.IntentFilter;
 import android.os.Parcelable;
 import android.support.v4.content.LocalBroadcastManager;
 
+import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.zauberlabs.android.network.receiver.Event;
 import com.zauberlabs.android.network.receiver.VoidBroadcastReceiver;
 
@@ -196,6 +197,20 @@ public class BroadcastManagerTest {
         expectedException.expect(IllegalArgumentException.class);
         expectedException.expectMessage("Event must have a name");
         manager.broadcast(event, listPayload);
+    }
+
+    @Test
+    public void shouldBroadcastEventWithExceptionPayload() {
+        ArgumentCaptor<Intent> captor = ArgumentCaptor.forClass(Intent.class);
+        Exception exception = new IllegalArgumentException("ERROR");
+        manager.broadcast(event, exception);
+        verify(event, atLeastOnce()).getName();
+        verify(broadcast).sendBroadcast(captor.capture());
+        Intent intent = captor.getValue();
+        assertNotNull(intent);
+        assertEquals(EVENT_NAME, intent.getAction());
+        Exception payload = (Exception) intent.getSerializableExtra(BroadcastManager.SINGLE_OBJECT_PAYLOAD_KEY);
+        assertEquals(exception.getMessage(), payload.getMessage());
     }
 
     @Test

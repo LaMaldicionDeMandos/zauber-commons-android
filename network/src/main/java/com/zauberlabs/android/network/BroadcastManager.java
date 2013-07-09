@@ -53,6 +53,12 @@ public class BroadcastManager {
         broadcast.sendBroadcast(intent);
     }
 
+    public <T extends Parcelable> void broadcast(Event event, Exception payload) {
+        Intent intent = buildIntent(event);
+        intent.putExtra(SINGLE_OBJECT_PAYLOAD_KEY, payload);
+        broadcast.sendBroadcast(intent);
+    }
+
     public <T extends Parcelable> void broadcast(Event event, ArrayList<T> payload) {
         Intent intent = buildIntent(event);
         intent.putParcelableArrayListExtra(LIST_PAYLOAD_KEY, payload);

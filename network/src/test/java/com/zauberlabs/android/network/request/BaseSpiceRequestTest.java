@@ -4,6 +4,7 @@ import com.google.api.client.http.HttpHeaders;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.HttpResponseException;
+import com.zauberlabs.android.network.operation.HttpOperation;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -23,7 +24,6 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
@@ -44,7 +44,7 @@ public class BaseSpiceRequestTest {
 
     private HttpRequest request;
     private HttpResponse response;
-    private HttpRequestBuilder requestBuilder;
+    private HttpOperation requestBuilder;
     private HttpHeaders headers;
     private InputStream contentStream;
 
@@ -55,11 +55,11 @@ public class BaseSpiceRequestTest {
         request = mock(HttpRequest.class);
         response = mock(HttpResponse.class);
         headers = mock(HttpHeaders.class);
-        requestBuilder = mock(HttpRequestBuilder.class);
+        requestBuilder = mock(HttpOperation.class);
         contentStream = mock(InputStream.class);
         spiceRequest = newSpiceRequestFor(RESULT_TYPE);
 
-        when(requestBuilder.build(anyString())).thenReturn(request);
+        when(requestBuilder.buildRequest(anyString())).thenReturn(request);
         when(request.execute()).thenReturn(response);
         when(response.parseAs(eq(RESULT_TYPE))).thenReturn(STRING_VALUE);
         when(requestBuilder.isSuccessful(eq(response))).thenReturn(TRUE);
@@ -70,14 +70,14 @@ public class BaseSpiceRequestTest {
     @Test
     public void shouldBuildAndExecuteHttpRequest() throws Exception {
         spiceRequest.loadDataFromNetwork();
-        verify(requestBuilder).build(eq(URL));
+        verify(requestBuilder).buildRequest(eq(URL));
         verify(request).execute();
     }
 
     @Test
     public void shouldBuildRequestWithURL() throws Exception {
         spiceRequest.loadDataFromNetwork();
-        verify(requestBuilder).build(eq(URL));
+        verify(requestBuilder).buildRequest(eq(URL));
     }
 
     @Test

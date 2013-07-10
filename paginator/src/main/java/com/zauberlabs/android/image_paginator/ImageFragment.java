@@ -1,4 +1,4 @@
-package com.zauberlabs.android.examples;
+package com.zauberlabs.android.image_paginator;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;

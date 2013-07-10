@@ -1,4 +1,4 @@
-package com.zauberlabs.android.examples;
+package com.zauberlabs.android.image_paginator;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

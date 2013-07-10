@@ -8,6 +8,7 @@ import android.util.Log;
 import java.util.Arrays;
 import java.util.List;
 
+import com.zauberlabs.android.image_paginator.ImagePagerAdapter;
 import com.zauberlabs.android.image_paginator.ImagePaginator;
 
 public class HelloAndroidActivity extends FragmentActivity {

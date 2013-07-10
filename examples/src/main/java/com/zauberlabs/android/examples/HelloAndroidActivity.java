@@ -1,11 +1,16 @@
 package com.zauberlabs.android.examples;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.PagerAdapter;
 import android.util.Log;
-import android.widget.Toast;
 
-public class HelloAndroidActivity extends Activity {
+import java.util.Arrays;
+import java.util.List;
+
+import com.zauberlabs.android.image_paginator.ImagePaginator;
+
+public class HelloAndroidActivity extends FragmentActivity {
 
     private static String TAG = "examples";
 
@@ -20,6 +25,17 @@ public class HelloAndroidActivity extends Activity {
         super.onCreate(savedInstanceState);
 		Log.i(TAG, "onCreate");
         setContentView(R.layout.main);
+        List<String> urls = Arrays.asList(
+                "https://github.com/Proyecto-UTN-2012/Proyecto-UTN-2012/blob/master/integrar-t-android/res/drawable/cali1.png?raw=true",
+                "https://github.com/Proyecto-UTN-2012/Proyecto-UTN-2012/blob/master/integrar-t-android/res/drawable/cali2.png?raw=true",
+                "https://github.com/Proyecto-UTN-2012/Proyecto-UTN-2012/blob/master/integrar-t-android/res/drawable/cali3.png?raw=true",
+                "https://github.com/Proyecto-UTN-2012/Proyecto-UTN-2012/blob/master/integrar-t-android/res/drawable/cali4.png?raw=true",
+                "https://github.com/Proyecto-UTN-2012/Proyecto-UTN-2012/blob/master/integrar-t-android/res/drawable/cali5.png?raw=true",
+                "https://github.com/Proyecto-UTN-2012/Proyecto-UTN-2012/blob/master/integrar-t-android/res/drawable/cali6.png?raw=true"
+                );
+        ImagePaginator paginator = (ImagePaginator) findViewById(R.id.paginator);
+        PagerAdapter adapter = new ImagePagerAdapter( getSupportFragmentManager(), urls);
+        paginator.setAdapter(adapter);
     }
 
 }

@@ -3,6 +3,9 @@ package com.zauberlabs.android.examples;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
+
+import com.zauberlabs.android.image_paginator.NameResolver;
 
 public class HelloAndroidActivity extends Activity {
 
@@ -19,6 +22,7 @@ public class HelloAndroidActivity extends Activity {
         super.onCreate(savedInstanceState);
 		Log.i(TAG, "onCreate");
         setContentView(R.layout.main);
+        Toast.makeText(this, new NameResolver().toString(), Toast.LENGTH_LONG).show();
     }
 
 }

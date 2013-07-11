@@ -11,18 +11,18 @@ import com.zauberlabs.android.network.operation.HttpOperation;
  */
 public abstract class BaseSpiceRequest<T> extends GoogleHttpClientSpiceRequest<T> {
 
-    private final HttpOperation requestBuilder;
+    private final HttpOperation operation;
 
-    public BaseSpiceRequest(Class<T> clazz, HttpOperation requestBuilder) {
+    public BaseSpiceRequest(Class<T> clazz, HttpOperation operation) {
         super(clazz);
-        this.requestBuilder = requestBuilder;
+        this.operation = operation;
     }
 
     @Override
     public T loadDataFromNetwork() throws Exception {
-        final HttpRequest request = requestBuilder.buildRequest(getResourcePath());
+        final HttpRequest request = operation.buildRequest(getResourcePath(), getHttpRequestFactory());
         HttpResponse response = request.execute();
-        if (!requestBuilder.isSuccessful(response)) {
+        if (!operation.isSuccessful(response)) {
             throw new HttpResponseException(response);
         }
         T value = null;

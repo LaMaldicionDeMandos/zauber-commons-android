@@ -30,7 +30,7 @@ public abstract class ImagePagerAdapter<T> extends FragmentPagerAdapter {
         return photos.size();
     }
 
-    protected void setPlaceholderResource(int placeholderResource) {
+    final protected void setPlaceholderResource(int placeholderResource) {
         this.placeholderResource = placeholderResource;
     }
 }

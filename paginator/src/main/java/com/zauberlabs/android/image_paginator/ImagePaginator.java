@@ -1,6 +1,7 @@
 package com.zauberlabs.android.image_paginator;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
@@ -15,25 +16,31 @@ import android.widget.RadioGroup;
  */
 public class ImagePaginator extends FrameLayout implements ViewPager.OnPageChangeListener {
     private static final int MARGIN = 4;
-    protected static final int INVALID_PLACEHOLDER = -1;
 
     private ViewPager pager;
     private RadioGroup container;
     private RadioButton[] buttons;
 
-    private int placeholder = INVALID_PLACEHOLDER;
+    private int placeholder = ImageFragment.INVALID_PLACEHOLDER;
 
     public ImagePaginator(final Context context, final AttributeSet attrs, final int defStyle) {
         super(context, attrs, defStyle);
+        setAttributes(attrs);
         init();
     }
     public ImagePaginator(final Context context, final AttributeSet attrs) {
         super(context, attrs);
+        setAttributes(attrs);
         init();
     }
     public ImagePaginator(final Context context) {
         super(context);
         init();
+    }
+
+    private void setAttributes(final AttributeSet attrs) {
+        TypedArray ta = getContext().getTheme().obtainStyledAttributes(attrs, R.styleable.ImagePaginator,0,0);
+        placeholder = ta.getResourceId(R.styleable.ImagePaginator_placeholder, ImageFragment.INVALID_PLACEHOLDER);
     }
 
     private void init(){
@@ -47,9 +54,7 @@ public class ImagePaginator extends FrameLayout implements ViewPager.OnPageChang
 
     public void setAdapter(final ImagePagerAdapter<?> adapter){
         addBullets(adapter);
-        if (hasPlaceholder()) {
-            adapter.setPlaceholderResource(placeholder);
-        }
+        adapter.setPlaceholderResource(placeholder);
         pager.setAdapter(adapter);
     }
 
@@ -75,10 +80,6 @@ public class ImagePaginator extends FrameLayout implements ViewPager.OnPageChang
         button.setChecked(checked);
         container.addView(button);
         return button;
-    }
-
-    private boolean hasPlaceholder() {
-        return placeholder != INVALID_PLACEHOLDER;
     }
 
     private boolean checkNotEmpty(final PagerAdapter adapter){
@@ -107,7 +108,7 @@ public class ImagePaginator extends FrameLayout implements ViewPager.OnPageChang
     public void setPlaceholder(int placeholder) {
         this.placeholder = placeholder;
         ImagePagerAdapter<?> adapter = (ImagePagerAdapter<?>) pager.getAdapter();
-        if (hasPlaceholder() && adapter != null) {
+        if (adapter != null) {
             adapter.setPlaceholderResource(placeholder);
         }
     }

@@ -9,14 +9,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.androidquery.AQuery;
-import com.androidquery.callback.AjaxStatus;
-import com.androidquery.callback.BitmapAjaxCallback;
 import com.androidquery.callback.ImageOptions;
 
 /**
  * Created by marcelo on 7/10/13.
  */
 class ImageFragment extends Fragment {
+    public static final int INVALID_PLACEHOLDER = -1;
     private String url;
     private ImageView view;
     private int placeholderResource;
@@ -39,7 +38,6 @@ class ImageFragment extends Fragment {
             buffer.setImageDrawable(view.getDrawable());
         }
         else{
-            buffer.setImageResource(placeholderResource);
             loadImage(buffer);
         }
         view = buffer;
@@ -47,8 +45,12 @@ class ImageFragment extends Fragment {
     }
 
     private void loadImage(final ImageView view) {
-        ImageOptions options = new ImageOptions();
-        options.animation = AQuery.FADE_IN;
-        new AQuery(getActivity()).id(view).image(url, options);
+        AQuery aquery = new AQuery(getActivity());
+        Bitmap placeholder =  aquery.getCachedImage(placeholderResource);
+        aquery.id(view).image(url, false, true, 0, 0, placeholder, AQuery.FADE_IN);
+    }
+
+    private boolean hasPlaceholder() {
+        return placeholderResource != INVALID_PLACEHOLDER;
     }
 }

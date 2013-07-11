@@ -11,7 +11,7 @@ import java.util.List;
  */
 public abstract class ImagePagerAdapter<T> extends FragmentPagerAdapter {
     private final List<T> photos;
-    private final BitmapRequestProvider provider = new ImageRequestProvider();
+    private int placeholderResource;
     public ImagePagerAdapter(final FragmentManager fm, final List<T> photos) {
         super(fm);
         this.photos = photos;
@@ -20,7 +20,7 @@ public abstract class ImagePagerAdapter<T> extends FragmentPagerAdapter {
     @Override
     final public Fragment getItem(final int position) {
         final String url = getUrl(photos.get(position));
-        return ImageFragment.newInstance(url, provider);
+        return ImageFragment.newInstance(url, placeholderResource);
     }
 
     abstract protected String getUrl(T item);
@@ -28,5 +28,9 @@ public abstract class ImagePagerAdapter<T> extends FragmentPagerAdapter {
     @Override
     final public int getCount() {
         return photos.size();
+    }
+
+    protected void setPlaceholderResource(int placeholderResource) {
+        this.placeholderResource = placeholderResource;
     }
 }

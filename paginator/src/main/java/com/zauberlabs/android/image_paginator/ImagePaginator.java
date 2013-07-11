@@ -15,10 +15,13 @@ import android.widget.RadioGroup;
  */
 public class ImagePaginator extends FrameLayout implements ViewPager.OnPageChangeListener {
     private static final int MARGIN = 4;
+    protected static final int INVALID_PLACEHOLDER = -1;
 
     private ViewPager pager;
     private RadioGroup container;
     private RadioButton[] buttons;
+
+    private int placeholder = INVALID_PLACEHOLDER;
 
     public ImagePaginator(final Context context, final AttributeSet attrs, final int defStyle) {
         super(context, attrs, defStyle);
@@ -42,8 +45,11 @@ public class ImagePaginator extends FrameLayout implements ViewPager.OnPageChang
         this.addView(view);
     }
 
-    public void setAdapter(final PagerAdapter adapter){
+    public void setAdapter(final ImagePagerAdapter<?> adapter){
         addBullets(adapter);
+        if (hasPlaceholder()) {
+            adapter.setPlaceholderResource(placeholder);
+        }
         pager.setAdapter(adapter);
     }
 
@@ -71,6 +77,10 @@ public class ImagePaginator extends FrameLayout implements ViewPager.OnPageChang
         return button;
     }
 
+    private boolean hasPlaceholder() {
+        return placeholder != INVALID_PLACEHOLDER;
+    }
+
     private boolean checkNotEmpty(final PagerAdapter adapter){
         return adapter.getCount() > 0;
     }
@@ -89,4 +99,16 @@ public class ImagePaginator extends FrameLayout implements ViewPager.OnPageChang
 
     @Override
     public void onPageScrollStateChanged(int position) {}
+
+    public int getPlaceholder() {
+        return placeholder;
+    }
+
+    public void setPlaceholder(int placeholder) {
+        this.placeholder = placeholder;
+        ImagePagerAdapter<?> adapter = (ImagePagerAdapter<?>) pager.getAdapter();
+        if (hasPlaceholder() && adapter != null) {
+            adapter.setPlaceholderResource(placeholder);
+        }
+    }
 }

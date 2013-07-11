@@ -8,20 +8,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.androidquery.AQuery;
+import com.androidquery.callback.AjaxStatus;
+import com.androidquery.callback.BitmapAjaxCallback;
+import com.androidquery.callback.ImageOptions;
+
 /**
  * Created by marcelo on 7/10/13.
  */
-public class ImageFragment extends Fragment implements BitmapRequestListener {
+class ImageFragment extends Fragment {
     private String url;
-    private BitmapRequestProvider provider;
     private ImageView view;
-    private Bitmap bitmap;
+    private int placeholderResource;
 
     public ImageFragment(){}
-    public static ImageFragment newInstance(String url, BitmapRequestProvider provider){
+    public static ImageFragment newInstance(String url, int placeholderResource){
         ImageFragment f	= new ImageFragment();
         f.url = url;
-        f.provider = provider;
+        f.placeholderResource = placeholderResource;
         return f;
     }
 
@@ -35,31 +39,16 @@ public class ImageFragment extends Fragment implements BitmapRequestListener {
             buffer.setImageDrawable(view.getDrawable());
         }
         else{
-            //TODO como pongo el placeholder?
-            //buffer.setImageResource(R.drawable.placeholder_photo);
-            provider.provide(url, this);
+            buffer.setImageResource(placeholderResource);
+            loadImage(buffer);
         }
         view = buffer;
         return view;
     }
 
-    @Override
-    public void onDetach(){
-        if(bitmap!=null){
-            bitmap.recycle();
-        }
-        super.onDetach();
-    }
-
-    @Override
-    public void onBitmap(final Bitmap bitmap) {
-        if(!isDetached() && getActivity()!=null){
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    view.setImageBitmap(bitmap);
-                }
-            });
-        }
+    private void loadImage(final ImageView view) {
+        ImageOptions options = new ImageOptions();
+        options.animation = AQuery.FADE_IN;
+        new AQuery(getActivity()).id(view).image(url, options);
     }
 }

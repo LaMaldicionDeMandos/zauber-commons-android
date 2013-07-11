@@ -35,7 +35,7 @@ public class HelloAndroidActivity extends FragmentActivity {
                 "https://github.com/Proyecto-UTN-2012/Proyecto-UTN-2012/blob/master/integrar-t-android/res/drawable/cali6.png?raw=true"
                 );
         ImagePaginator paginator = (ImagePaginator) findViewById(R.id.paginator);
-        PagerAdapter adapter = new ImagePagerAdapter<String>( getSupportFragmentManager(), urls){
+        ImagePagerAdapter<String> adapter = new ImagePagerAdapter<String>( getSupportFragmentManager(), urls){
             @Override
             protected String getUrl(String item) {
                 return item;

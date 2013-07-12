@@ -1,6 +1,8 @@
 package com.zauberlabs.android.network.operation;
 
 import com.google.api.client.http.GenericUrl;
+import com.google.api.client.http.HttpContent;
+import com.google.api.client.http.HttpMethods;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestFactory;
 import com.google.api.client.http.HttpResponse;
@@ -21,12 +23,14 @@ import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.zauberlabs.android.network.Matchers.isNullOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -36,7 +40,7 @@ import static org.mockito.Mockito.when;
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({HttpRequest.class, HttpResponse.class, HttpRequestFactory.class})
-public class HttpGetOperationTest {
+public class HttpBaseOperationTest {
 
     private static final String BASE_URL = "http://www.somewhere.far.beyond";
     private static final String PATH = "resource";
@@ -49,68 +53,70 @@ public class HttpGetOperationTest {
     private HttpRequest request;
     private HttpResponse response;
     private HttpRequestFactory factory;
+    private Map<String,String> parameters;
 
     private HttpOperation operation;
-    private Map<String,String> parameters;
 
     @Before
     public void setUp() throws Exception {
         request = mock(HttpRequest.class);
         response = mock(HttpResponse.class);
         factory = mock(HttpRequestFactory.class);
-        operation = new HttpGetOperation(BASE_URL);
+        operation = new HttpBaseOperation(BASE_URL, HttpMethods.PUT);
         parameters = new HashMap<String, String>();
         parameters.put("key", "value");
 
-        when(factory.buildGetRequest(any(GenericUrl.class))).thenReturn(request);
+        when(factory.buildRequest(eq(HttpMethods.PUT), any(GenericUrl.class), isNullOf(HttpContent.class))).thenReturn(request);
     }
 
     @Test
     public void shouldCreateOperationWithBaseURL() throws MalformedURLException {
-        assertNotNull(new HttpGetOperation(BASE_URL));
+        assertNotNull(new HttpBaseOperation(BASE_URL, HttpMethods.GET));
     }
 
     @Test
     public void shouldFailToCreateWhenURLIsInvalid() throws Exception {
         expectedException.expect(MalformedURLException.class);
-        assertNull(new HttpGetOperation("INVALID"));
+        assertNull(new HttpBaseOperation("INVALID", HttpMethods.GET));
     }
 
     @Test
-    public void shouldCreateOperationWithParams() throws MalformedURLException {
-        assertNotNull(new HttpGetOperation(BASE_URL, new HashMap<String, Object>()));
+    public void shouldFailToCreateWhenHttpMethodIsNull() throws Exception {
+        expectedException.expect(IllegalArgumentException.class);
+        assertNull(new HttpBaseOperation(BASE_URL, null));
+    }
+
+    @Test
+    public void shouldFailToCreateWhenHttpMethodIsEmpty() throws Exception {
+        expectedException.expect(IllegalArgumentException.class);
+        assertNull(new HttpBaseOperation(BASE_URL, ""));
+    }
+
+    @Test
+    public void shouldCreateOperationWithHttpMethod() throws MalformedURLException {
+        assertNotNull(new HttpBaseOperation(BASE_URL, HttpMethods.PATCH));
     }
 
     @Test
     public void shouldFailToCreateWhenURLIsNull() throws Exception {
         expectedException.expect(MalformedURLException.class);
-        assertNull(new HttpGetOperation(null));
+        assertNull(new HttpBaseOperation(null, HttpMethods.GET));
     }
 
     @Test
     public void shouldCreateRequest() throws IOException {
         final HttpRequest request = operation.buildRequest(PATH, factory);
         assertNotNull(request);
-        verify(factory).buildGetRequest(any(GenericUrl.class));
+        verify(factory).buildRequest(eq(HttpMethods.PUT), any(GenericUrl.class), isNullOf(HttpContent.class));
     }
 
     @Test
     public void shouldCreateRequestWithResourcePath() throws Exception {
         operation.buildRequest(PATH, factory);
         ArgumentCaptor<GenericUrl> captor = ArgumentCaptor.forClass(GenericUrl.class);
-        verify(factory).buildGetRequest(captor.capture());
+        verify(factory).buildRequest(eq(HttpMethods.PUT), captor.capture(), isNullOf(HttpContent.class));
         GenericUrl url = captor.getValue();
         assertEquals(FULL_URL, url.build());
-    }
-
-    @Test
-    public void shouldCreateRequestWithResourcePathAndParameters() throws Exception {
-        operation = new HttpGetOperation(BASE_URL, parameters);
-        operation.buildRequest(PATH, factory);
-        ArgumentCaptor<GenericUrl> captor = ArgumentCaptor.forClass(GenericUrl.class);
-        verify(factory).buildGetRequest(captor.capture());
-        GenericUrl url = captor.getValue();
-        assertEquals(FULL_URL_WITH_PARAMS, url.build());
     }
 
     @Test
@@ -137,4 +143,18 @@ public class HttpGetOperationTest {
         assertFalse(operation.isSuccessful(response));
     }
 
+    @Test
+    public void shouldCreateOperationWithParams() throws MalformedURLException {
+        assertNotNull(new HttpBaseOperation(BASE_URL, HttpMethods.GET, new HashMap<String, Object>()));
+    }
+
+    @Test
+    public void shouldCreateRequestWithResourcePathAndParameters() throws Exception {
+        operation = new HttpBaseOperation(BASE_URL, HttpMethods.PUT, parameters);
+        operation.buildRequest(PATH, factory);
+        ArgumentCaptor<GenericUrl> captor = ArgumentCaptor.forClass(GenericUrl.class);
+        verify(factory).buildRequest(eq(HttpMethods.PUT), captor.capture(), isNullOf(HttpContent.class));
+        GenericUrl url = captor.getValue();
+        assertEquals(FULL_URL_WITH_PARAMS, url.build());
+    }
 }

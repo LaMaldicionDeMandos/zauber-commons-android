@@ -14,7 +14,7 @@ import android.widget.CompoundButton;
 */
 public interface Groupable<T extends CompoundButton> {
     public interface Predicate<F> {
-        String applyToText(F item);
+        CharSequence applyToText(F item);
         <K> K applyToTag(F item);
     }
 

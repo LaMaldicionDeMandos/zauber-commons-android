@@ -18,9 +18,9 @@ public interface Groupable<T extends CompoundButton> {
         <K> K applyToTag(F item);
     }
 
-    T addItem(String text, Object tag);
+    T addItem(CharSequence text, Object tag);
 
-    T addItem(String text, Object tag, boolean checked);
+    T addItem(CharSequence text, Object tag, boolean checked);
 
     T findWithTag(Object tag);
 

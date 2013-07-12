@@ -4,3 +4,8 @@
 
 #Maven noise
 target/
+
+.settings/
+tmp/
+.classpath
+.project

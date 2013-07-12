@@ -61,6 +61,7 @@
 
   <modules>
     <module>network</module>
+    <module>groupable</module>
   </modules>
 
   <dependencyManagement>

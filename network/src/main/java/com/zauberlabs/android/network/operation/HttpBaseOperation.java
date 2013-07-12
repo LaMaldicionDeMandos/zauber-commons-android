@@ -1,11 +1,13 @@
 package com.zauberlabs.android.network.operation;
 
 import com.google.api.client.http.GenericUrl;
+import com.google.api.client.http.HttpContent;
 import com.google.api.client.http.HttpMethods;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestFactory;
 import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.HttpStatusCodes;
+import com.google.api.client.http.json.JsonHttpContent;
 import com.google.api.client.json.gson.GsonFactory;
 
 import java.io.IOException;
@@ -22,6 +24,7 @@ public class HttpBaseOperation implements HttpOperation {
 
     protected final URL baseUrl;
     private final String method;
+    private Object payload;
     private Map<? extends String, ?> params;
 
     public HttpBaseOperation(String baseUrl, String method) throws MalformedURLException {
@@ -36,11 +39,21 @@ public class HttpBaseOperation implements HttpOperation {
         this.params = params;
     }
 
+    public HttpBaseOperation(String baseUrl, String method, Object payload) throws MalformedURLException {
+        this(baseUrl, method);
+        this.payload = payload;
+    }
+
     @Override
     public HttpRequest buildRequest(String path, HttpRequestFactory factory) throws IOException {
         GenericUrl url = buildGenericURL(path);
-        HttpRequest request = factory.buildRequest(method, url, null);
-        request.setParser(new GsonFactory().createJsonObjectParser());
+        GsonFactory gsonFactory = new GsonFactory();
+        HttpContent content = null;
+        if (payload != null) {
+            content = new JsonHttpContent(gsonFactory, payload);
+        }
+        HttpRequest request = factory.buildRequest(method, url, content);
+        request.setParser(gsonFactory.createJsonObjectParser());
         return request;
     }
 

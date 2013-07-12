@@ -9,6 +9,7 @@ import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.HttpStatusCodes;
 import com.google.api.client.util.ObjectParser;
 
+import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -24,13 +25,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.zauberlabs.android.network.Matchers.isNullOf;
+import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.contains;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Matchers.startsWith;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -54,6 +60,7 @@ public class HttpBaseOperationTest {
     private HttpResponse response;
     private HttpRequestFactory factory;
     private Map<String,String> parameters;
+    private Object object;
 
     private HttpOperation operation;
 
@@ -65,8 +72,9 @@ public class HttpBaseOperationTest {
         operation = new HttpBaseOperation(BASE_URL, HttpMethods.PUT);
         parameters = new HashMap<String, String>();
         parameters.put("key", "value");
+        object = mock(Object.class);
 
-        when(factory.buildRequest(eq(HttpMethods.PUT), any(GenericUrl.class), isNullOf(HttpContent.class))).thenReturn(request);
+        when(factory.buildRequest(anyString(), any(GenericUrl.class), any(HttpContent.class))).thenReturn(request);
     }
 
     @Test
@@ -156,5 +164,22 @@ public class HttpBaseOperationTest {
         verify(factory).buildRequest(eq(HttpMethods.PUT), captor.capture(), isNullOf(HttpContent.class));
         GenericUrl url = captor.getValue();
         assertEquals(FULL_URL_WITH_PARAMS, url.build());
+    }
+
+    @Test
+    public void shouldCreateOperationWithBodyContent() throws MalformedURLException {
+        assertNotNull(new HttpBaseOperation(BASE_URL, HttpMethods.POST, object));
+    }
+
+    @Test
+    public void shouldCreateRequestWithBody() throws Exception {
+        operation = new HttpBaseOperation(BASE_URL, HttpMethods.POST, object);
+        HttpRequest request = operation.buildRequest(PATH, factory);
+        assertNotNull(request);
+        ArgumentCaptor<HttpContent> captor = ArgumentCaptor.forClass(HttpContent.class);
+        verify(factory).buildRequest(eq(HttpMethods.POST), any(GenericUrl.class), captor.capture());
+        HttpContent content = captor.getValue();
+        assertNotNull(content);
+        assertThat(content.getType(), containsString("application/json"));
     }
 }

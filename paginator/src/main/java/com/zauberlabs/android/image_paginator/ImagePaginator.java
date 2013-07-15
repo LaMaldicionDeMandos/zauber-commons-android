@@ -7,9 +7,12 @@ import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+
+import com.zauberlabs.android.groupable.MultilineRadioGroup;
 
 /**
  * Created by marcelo on 7/10/13.
@@ -18,7 +21,7 @@ public class ImagePaginator extends FrameLayout implements ViewPager.OnPageChang
     private static final int MARGIN = 4;
 
     private ViewPager pager;
-    private RadioGroup container;
+    private MultilineRadioGroup container;
     private RadioButton[] buttons;
 
     private int placeholder = ImageFragment.INVALID_PLACEHOLDER;
@@ -48,7 +51,7 @@ public class ImagePaginator extends FrameLayout implements ViewPager.OnPageChang
         View view = inflater.inflate(R.layout.image_paginator, null);
         pager = (ViewPager) view.findViewById(R.id.pager);
         pager.setOnPageChangeListener(this);
-        container = (RadioGroup)view.findViewById(R.id.container);
+        container = (MultilineRadioGroup)view.findViewById(R.id.container);
         this.addView(view);
     }
 
@@ -59,27 +62,28 @@ public class ImagePaginator extends FrameLayout implements ViewPager.OnPageChang
     }
 
     private void addBullets(final PagerAdapter adapter){
-        container.removeAllViews();
+        container.clear();
         if(checkNotEmpty(adapter)){
-            buttons = new RadioButton[adapter.getCount()];
-            buttons[0] = createBullet(true);
-            for(int i=1;i<buttons.length;i++){
-                buttons[i] = createBullet(false);
+            addBullet(0, true);
+            for (int i = 1; i < adapter.getCount(); i++) {
+                addBullet(i, false);
             }
         }
     }
 
-    private RadioButton createBullet(final boolean checked){
-        RadioButton button = new RadioButton(getContext());
-        RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(RadioGroup.LayoutParams.WRAP_CONTENT,RadioGroup.LayoutParams.WRAP_CONTENT);
-        params.setMargins(MARGIN, MARGIN, MARGIN, MARGIN);
-        button.setClickable(false);
-        button.setLayoutParams(params);
-        //TODO esto va a ser externalizado
-        //button.setButtonDrawable(R.drawable.page_bullet);
-        button.setChecked(checked);
-        container.addView(button);
-        return button;
+    private CheckBox addBullet(int tag, final boolean checked){
+        final CheckBox checkBox = container.addItem("", tag, checked);
+        //Esto lo tomo de la configuracion
+        final int margin = 0;//getResources().getDimensionPixelSize(R.dimen.bullet_margin);
+        final int size = 24;//getResources().getDimensionPixelSize(R.dimen.bullet_size);
+
+        final RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(size, size);
+        params.setMargins(margin, margin, margin, margin);
+        checkBox.setClickable(false);
+        checkBox.setLayoutParams(params);
+        //Configurable
+        //checkBox.setBackgroundResource(R.drawable.page_bullet);
+        return checkBox;
     }
 
     private boolean checkNotEmpty(final PagerAdapter adapter){
@@ -93,9 +97,7 @@ public class ImagePaginator extends FrameLayout implements ViewPager.OnPageChang
 
     @Override
     public void onPageSelected(int position) {
-        for(int i=0;i<buttons.length;i++){
-            buttons[i].setChecked(i==position);
-        }
+        container.setChecked(position, true);
     }
 
     @Override

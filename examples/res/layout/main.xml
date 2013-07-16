@@ -11,7 +11,7 @@
             android:layout_height="match_parent"
             paginator:placeholder="@drawable/icon"
             paginator:bullet_margin="5dp"
-            paginator:bullet_size="20dp"
+            paginator:bullet_size="10dp"
             />
 
 </LinearLayout>

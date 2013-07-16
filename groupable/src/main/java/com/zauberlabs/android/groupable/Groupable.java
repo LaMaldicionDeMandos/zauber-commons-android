@@ -2,6 +2,8 @@ package com.zauberlabs.android.groupable;
 
 import java.util.List;
 
+import android.content.Context;
+import android.util.AttributeSet;
 import android.widget.CompoundButton;
 
 
@@ -35,4 +37,10 @@ public interface Groupable<T extends CompoundButton> {
     <F> void populate(List<F> items, Predicate<F> predicate);
 
     void setChecked(Object tag, boolean checked);
+
+    public interface GroupableFactory {
+        <T extends CompoundButton> T craete(Context context);
+        <T extends CompoundButton> T craete(Context context, AttributeSet attrs);
+        <T extends CompoundButton> T craete(Context context, AttributeSet attrs, int defStyle);
+    }
 }

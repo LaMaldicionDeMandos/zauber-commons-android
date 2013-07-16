@@ -8,6 +8,7 @@ import static com.google.common.collect.Lists.newArrayList;
 
 import java.util.List;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Point;
 import android.os.Build;
@@ -38,6 +39,7 @@ public class MultilineRadioGroup extends LinearLayout implements
         initialize(context);
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public MultilineRadioGroup(final Context context, final AttributeSet attrs, final int defStyle) {
         super(context, attrs, defStyle);
         initialize(context);

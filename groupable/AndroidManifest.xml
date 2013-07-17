@@ -3,9 +3,7 @@
   package="com.zauberlabs.android.groupable" android:versionCode="1" android:versionName="1.0.0-SNAPSHOT">
 
   <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="15" />
-  <application android:label="@string/app_name">
-    <activity android:name=".HelloAndroidActivity" />
-  </application>
+
 
 </manifest>
 

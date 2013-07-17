@@ -151,8 +151,8 @@ public class ImagePaginator extends FrameLayout implements ViewPager.OnPageChang
 
     private Drawable createBulletByDefault() {
         StateListDrawable bullet = new StateListDrawable();
-        Drawable on = createBulletShape(bulletSize, bulletColorOn);
-        Drawable off = createBulletShape(bulletSize, bulletColorOff);
+        Drawable on = createBulletShape(bulletColorOn);
+        Drawable off = createBulletShape(bulletColorOff);
         bullet.addState(new int[]{android.R.attr.state_checked}, on);
         bullet.addState(new int[0], off);
         bullet.addState(new int[]{android.R.attr.state_checked, android.R.attr.state_pressed}, on);
@@ -160,7 +160,7 @@ public class ImagePaginator extends FrameLayout implements ViewPager.OnPageChang
         return bullet;
     }
 
-    private Drawable createBulletShape(int size, int color) {
+    private Drawable createBulletShape(int color) {
         GradientDrawable bullet = (GradientDrawable) getResources().getDrawable(R.drawable.default_bullet);
         bullet.setColor(color);
         return bullet;

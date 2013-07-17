@@ -6,6 +6,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import java.util.List;
 
+import static com.google.common.base.Preconditions.*;
+
 /**
  * Created by marcelo on 7/10/13.
  */
@@ -14,6 +16,7 @@ public abstract class ImagePagerAdapter<T> extends FragmentPagerAdapter {
     private int placeholderResource;
     public ImagePagerAdapter(final FragmentManager fm, final List<T> photos) {
         super(fm);
+        checkNotNull(photos);
         this.photos = photos;
     }
 

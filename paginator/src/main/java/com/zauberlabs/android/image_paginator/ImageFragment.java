@@ -34,10 +34,9 @@ class ImageFragment extends Fragment {
         ImageView buffer = new ImageView(getActivity());
         buffer.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         buffer.setScaleType(ImageView.ScaleType.FIT_XY);
-        if(view!=null){
+        if (view != null) {
             buffer.setImageDrawable(view.getDrawable());
-        }
-        else{
+        } else {
             loadImage(buffer);
         }
         view = buffer;

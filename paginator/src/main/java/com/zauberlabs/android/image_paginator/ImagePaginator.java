@@ -13,6 +13,7 @@ import android.graphics.drawable.shapes.OvalShape;
 import android.graphics.drawable.shapes.RectShape;
 import android.graphics.drawable.shapes.RoundRectShape;
 import android.graphics.drawable.shapes.Shape;
+import android.os.Build;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
@@ -99,6 +100,7 @@ public class ImagePaginator extends FrameLayout implements ViewPager.OnPageChang
         }
     }
 
+    @SuppressWarnings("deprecation")
     private CheckBox addBullet(int tag, final boolean checked){
         final CheckBox checkBox = container.addItem("", tag, checked);
         final int margin = bulletMargin;
@@ -112,7 +114,12 @@ public class ImagePaginator extends FrameLayout implements ViewPager.OnPageChang
             checkBox.setBackgroundResource(bullet);
         }
         else {
-            checkBox.setBackgroundDrawable(createBulletByDefault());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+                checkBox.setBackground(createBulletByDefault());
+            }
+            else {
+                checkBox.setBackgroundDrawable(createBulletByDefault());
+            }
         }
         return checkBox;
     }

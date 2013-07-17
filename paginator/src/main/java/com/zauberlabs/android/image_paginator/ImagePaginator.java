@@ -26,8 +26,8 @@ import com.zauberlabs.android.groupable.MultilineRadioGroup;
  * Created by marcelo on 7/10/13.
  */
 public class ImagePaginator extends FrameLayout implements ViewPager.OnPageChangeListener {
-    private static final int DEFAULT_BULLET_MARGIN = 4;
-    private static final int DEFAULT_BULLET_SIZE = 60;
+    private static final int DEFAULT_BULLET_MARGIN = 8;
+    private static final int DEFAULT_BULLET_SIZE = 20;
     private static final int DEFAULT_BACKGROUND = R.layout.checkbox;
     private static final int DEFAULT_BULLET = -1;
     private static final int DEFAULT_BULLET_COLOR_ON = 0xffffffff;

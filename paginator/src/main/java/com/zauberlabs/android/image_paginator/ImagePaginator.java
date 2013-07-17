@@ -3,15 +3,11 @@ package com.zauberlabs.android.image_paginator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.StateListDrawable;
-import android.graphics.drawable.shapes.OvalShape;
-import android.graphics.drawable.shapes.RectShape;
-import android.graphics.drawable.shapes.RoundRectShape;
 import android.graphics.drawable.shapes.Shape;
 import android.os.Build;
 import android.support.v4.view.PagerAdapter;
@@ -155,8 +151,8 @@ public class ImagePaginator extends FrameLayout implements ViewPager.OnPageChang
 
     private Drawable createBulletByDefault() {
         StateListDrawable bullet = new StateListDrawable();
-        ShapeDrawable on = createBulletShape(bulletSize, bulletColorOn);
-        ShapeDrawable off = createBulletShape(bulletSize, bulletColorOff);
+        Drawable on = createBulletShape(bulletSize, bulletColorOn);
+        Drawable off = createBulletShape(bulletSize, bulletColorOff);
         bullet.addState(new int[]{android.R.attr.state_checked}, on);
         bullet.addState(new int[0], off);
         bullet.addState(new int[]{android.R.attr.state_checked, android.R.attr.state_pressed}, on);
@@ -164,29 +160,9 @@ public class ImagePaginator extends FrameLayout implements ViewPager.OnPageChang
         return bullet;
     }
 
-    private ShapeDrawable createBulletShape(int size, int color) {
-        ShapeDrawable bullet = new StrokedShapeDrawable(new RoundRectShape(new float[]{5,5,5,5,5,5,5,5}, null, null));
-        bullet.getPaint().setColor(color);
-        bullet.setIntrinsicHeight(size);
-        bullet.setIntrinsicWidth(size);
+    private Drawable createBulletShape(int size, int color) {
+        GradientDrawable bullet = (GradientDrawable) getResources().getDrawable(R.drawable.default_bullet);
+        bullet.setColor(color);
         return bullet;
-    }
-
-    class StrokedShapeDrawable extends ShapeDrawable {
-        private Paint strokepaint;
-
-        public StrokedShapeDrawable(Shape shape) {
-            super(shape);
-            strokepaint = new Paint(getPaint());
-            strokepaint.setStyle(Paint.Style.STROKE);
-            strokepaint.setStrokeWidth(1);
-            strokepaint.setColor(0xff000000);
-        }
-
-        @Override
-        protected void onDraw(Shape shape, Canvas canvas, Paint paint) {
-            shape.draw(canvas, paint);
-            shape.draw(canvas, strokepaint);
-        }
     }
 }

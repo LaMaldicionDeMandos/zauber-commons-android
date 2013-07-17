@@ -5,14 +5,20 @@ import static com.google.common.collect.Lists.newArrayList;
 
 import java.util.List;
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.os.Build;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 
 
 
 public class CheckBoxGroup extends LinearLayout implements Groupable<CheckBox> {
+    private static final int INVALID_LAYOUT = -1;
+    private int checkboxResource = INVALID_LAYOUT;
+
     public CheckBoxGroup(final Context context) {
         super(context);
     }
@@ -21,6 +27,7 @@ public class CheckBoxGroup extends LinearLayout implements Groupable<CheckBox> {
         super(context, attrs);
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public CheckBoxGroup(final Context context, final AttributeSet attrs, final int defStyle) {
         super(context, attrs, defStyle);
     }
@@ -34,7 +41,10 @@ public class CheckBoxGroup extends LinearLayout implements Groupable<CheckBox> {
     public CheckBox addItem(final CharSequence text, final Object tag, final boolean checked) {
         checkNotNull(text, "Must supply a text");
         checkNotNull(tag, "Must supply a tag");
-        final CheckBox checkBox = new CheckBox(getContext());
+        final CheckBox checkBox = (checkboxResource != INVALID_LAYOUT)
+                ? (CheckBox) LayoutInflater.from(getContext()).inflate(checkboxResource, null)
+                : new CheckBox(getContext());
+
         checkBox.setId(tag.hashCode());
         checkBox.setText(text);
         checkBox.setTag(tag);
@@ -108,6 +118,14 @@ public class CheckBoxGroup extends LinearLayout implements Groupable<CheckBox> {
         final CheckBox item = (CheckBox) findViewWithTag(tag);
         checkArgument(item != null, "No item found with tag: " + tag);
         item.setChecked(checked);
+    }
+
+    public void setCheckboxResource(int resource) {
+        checkboxResource = resource;
+    }
+
+    public int getCheckboxResource() {
+        return checkboxResource;
     }
 
 

@@ -25,6 +25,10 @@ public class MultilineRadioGroup extends LinearLayout implements
     private final static int DEFAUTL_BULLET_MARGIN = 6; //4dp
     private final static int DEFAUTL_BULLET_SIZE = 12;  //8dip
 
+    private final static int INVALID_RADIO_RESOURCE = -1;
+
+    private int radioResource = INVALID_RADIO_RESOURCE;
+
     private final List<CheckBoxGroup> checkBoxGroupList = newArrayList();
     private int bulletsPerGroup;
 
@@ -48,7 +52,7 @@ public class MultilineRadioGroup extends LinearLayout implements
     private void initialize(final Context context) {
         setOrientation(LinearLayout.VERTICAL);
         setLayoutParams(new LayoutParams(MATCH_PARENT,WRAP_CONTENT));
-        addNewcheckBoxGroup(context);
+        //addNewcheckBoxGroup(context);
         bulletsPerGroup = getBulletsPerGroup(context);
     }
 
@@ -155,7 +159,10 @@ public class MultilineRadioGroup extends LinearLayout implements
     }
 
     private void addNewcheckBoxGroup(final Context context) {
-        final CheckBoxGroup checkBoxGroup = new CheckBoxGroup(context);
+        CheckBoxGroup checkBoxGroup = new CheckBoxGroup(context);
+        if (radioResource != INVALID_RADIO_RESOURCE) {
+            checkBoxGroup.setCheckboxResource(radioResource);
+        }
         checkBoxGroup.setOrientation(CheckBoxGroup.HORIZONTAL);
         checkBoxGroup.setGravity(Gravity.CENTER_HORIZONTAL);
         addView(checkBoxGroup, MATCH_PARENT, WRAP_CONTENT);
@@ -173,6 +180,14 @@ public class MultilineRadioGroup extends LinearLayout implements
             size.x = display.getWidth();
         }
         return size.x;
+    }
+
+    public void setRadioResource(int resource) {
+        radioResource = resource;
+    }
+
+    public int getRadioResource() {
+        return radioResource;
     }
 
 }

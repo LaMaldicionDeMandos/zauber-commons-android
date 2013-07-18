@@ -4,7 +4,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import java.net.MalformedURLException;
 import java.util.List;
+import java.net.URL;
 
 import static com.google.common.base.Preconditions.*;
 
@@ -16,17 +18,25 @@ public abstract class ImagePagerAdapter<T> extends FragmentPagerAdapter {
     private int placeholderResource;
     public ImagePagerAdapter(final FragmentManager fm, final List<T> photos) {
         super(fm);
-        checkNotNull(photos);
+        checkArgument(photos != null, "The photo list can't be null");
         this.photos = photos;
     }
 
+
+
+
     @Override
     final public Fragment getItem(final int position) {
-        final String url = getUrl(photos.get(position));
+        final URL url;
+        try {
+            url = getUrl(photos.get(position));
+        } catch (MalformedURLException e) {
+            throw new IllegalArgumentException(String.format("The url of item in position $s is malformed", position));
+        }
         return ImageFragment.newInstance(url, placeholderResource);
     }
 
-    abstract protected String getUrl(T item);
+    abstract protected URL getUrl(T item) throws MalformedURLException;
 
     @Override
     final public int getCount() {

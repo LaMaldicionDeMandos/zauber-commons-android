@@ -11,17 +11,19 @@ import android.widget.ImageView;
 import com.androidquery.AQuery;
 import com.androidquery.callback.ImageOptions;
 
+import java.net.URL;
+
 /**
  * Created by marcelo on 7/10/13.
  */
 class ImageFragment extends Fragment {
     public static final int INVALID_PLACEHOLDER = -1;
-    private String url;
+    private URL url;
     private ImageView view;
     private int placeholderResource;
 
     public ImageFragment(){}
-    public static ImageFragment newInstance(String url, int placeholderResource){
+    public static ImageFragment newInstance(URL url, int placeholderResource){
         ImageFragment f	= new ImageFragment();
         f.url = url;
         f.placeholderResource = placeholderResource;
@@ -46,7 +48,7 @@ class ImageFragment extends Fragment {
     private void loadImage(final ImageView view) {
         AQuery aquery = new AQuery(getActivity());
         Bitmap placeholder =  aquery.getCachedImage(placeholderResource);
-        aquery.id(view).image(url, false, true, 0, 0, placeholder, AQuery.FADE_IN);
+        aquery.id(view).image(url.toString(), false, true, 0, 0, placeholder, AQuery.FADE_IN);
     }
 
     private boolean hasPlaceholder() {

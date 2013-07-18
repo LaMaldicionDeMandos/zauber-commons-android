@@ -9,3 +9,5 @@ target/
 tmp/
 .classpath
 .project
+out/
+gen-external-apklibs/

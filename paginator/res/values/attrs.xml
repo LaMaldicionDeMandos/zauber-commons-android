@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ImagePaginator">
+        <attr name="placeholder" format="color"/>
+        <attr name="bullet_margin" format="dimension"/>
+        <attr name="bullet_size" format="dimension"/>
+        <attr name="bullet" format="color"/>
+        <attr name="bullet_color_on" format="color"/>
+        <attr name="bullet_color_off" format="color"/>
+    </declare-styleable>
+</resources>

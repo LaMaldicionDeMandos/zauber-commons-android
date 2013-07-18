@@ -5,6 +5,8 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerAdapter;
 import android.util.Log;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
@@ -38,8 +40,8 @@ public class HelloAndroidActivity extends FragmentActivity {
         //paginator.setPlaceholder(R.drawable.icon);
         ImagePagerAdapter<String> adapter = new ImagePagerAdapter<String>( getSupportFragmentManager(), urls){
             @Override
-            protected String getUrl(String item) {
-                return item;
+            protected URL getUrl(String item) throws MalformedURLException {
+                return new URL(item);
             }
         };
         paginator.setAdapter(adapter);

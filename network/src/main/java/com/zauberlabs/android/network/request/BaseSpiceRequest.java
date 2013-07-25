@@ -3,6 +3,7 @@ package com.zauberlabs.android.network.request;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.HttpResponseException;
+import com.google.gson.Gson;
 import com.octo.android.robospice.request.googlehttpclient.GoogleHttpClientSpiceRequest;
 import com.zauberlabs.android.network.operation.HttpOperation;
 
@@ -12,6 +13,7 @@ import com.zauberlabs.android.network.operation.HttpOperation;
 public abstract class BaseSpiceRequest<T> extends GoogleHttpClientSpiceRequest<T> {
 
     private final HttpOperation operation;
+    private final static Gson gson = new Gson();
 
     public BaseSpiceRequest(Class<T> clazz, HttpOperation operation) {
         super(clazz);
@@ -27,7 +29,8 @@ public abstract class BaseSpiceRequest<T> extends GoogleHttpClientSpiceRequest<T
         }
         T value = null;
         if (getResultType() != Void.class) {
-            value = response.parseAs(getResultType());
+            String json = response.parseAsString();
+            value = gson.fromJson(json, getResultType());
         }
         return value;
     }

@@ -64,7 +64,7 @@ public class BaseSpiceRequestTest {
 
         when(requestBuilder.buildRequest(anyString(), eq(factory))).thenReturn(request);
         when(request.execute()).thenReturn(response);
-        when(response.parseAs(eq(RESULT_TYPE))).thenReturn(STRING_VALUE);
+        when(response.parseAsString()).thenReturn(STRING_VALUE);
         when(requestBuilder.isSuccessful(eq(response))).thenReturn(TRUE);
         when(response.getHeaders()).thenReturn(headers);
         when(response.getContent()).thenReturn(contentStream);
@@ -87,7 +87,7 @@ public class BaseSpiceRequestTest {
     public void shouldParseResponseAndReturnValue() throws Exception {
         String value = spiceRequest.loadDataFromNetwork();
         assertEquals(STRING_VALUE, value);
-        verify(response).parseAs(RESULT_TYPE);
+        verify(response).parseAsString();
     }
 
     @Test

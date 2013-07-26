@@ -5,6 +5,8 @@ import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestFactory;
 import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.HttpResponseException;
+import com.google.common.collect.Lists;
+import com.google.gson.reflect.TypeToken;
 import com.zauberlabs.android.network.operation.HttpOperation;
 
 import org.junit.Before;
@@ -16,6 +18,11 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.io.InputStream;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
+
+import edu.emory.mathcs.backport.java.util.Arrays;
 
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
@@ -37,8 +44,10 @@ import static org.mockito.Mockito.when;
 public class BaseSpiceRequestTest {
 
     private static final Class<String> RESULT_TYPE = String.class;
+    private static final TypeToken<List<String>> RESULT_GENERIC_TYPE = new TypeToken<List<String>>(){};
     private static final String URL = "URL";
     private static final String STRING_VALUE = "VALUE";
+    private static final List<String> LIST_VALUE = Lists.newArrayList("VALUE1", "VALUE2");
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
@@ -64,7 +73,8 @@ public class BaseSpiceRequestTest {
 
         when(requestBuilder.buildRequest(anyString(), eq(factory))).thenReturn(request);
         when(request.execute()).thenReturn(response);
-        when(response.parseAsString()).thenReturn(STRING_VALUE);
+        when(response.parseAs(RESULT_TYPE)).thenReturn(STRING_VALUE);
+        when(response.parseAs(RESULT_GENERIC_TYPE.getType())).thenReturn(LIST_VALUE);
         when(requestBuilder.isSuccessful(eq(response))).thenReturn(TRUE);
         when(response.getHeaders()).thenReturn(headers);
         when(response.getContent()).thenReturn(contentStream);
@@ -87,13 +97,21 @@ public class BaseSpiceRequestTest {
     public void shouldParseResponseAndReturnValue() throws Exception {
         String value = spiceRequest.loadDataFromNetwork();
         assertEquals(STRING_VALUE, value);
-        verify(response).parseAsString();
+        verify(response).parseAs(RESULT_TYPE);
     }
 
     @Test
     public void shouldReturnValueOnSuccess() throws Exception {
         String value = spiceRequest.loadDataFromNetwork();
         assertEquals(STRING_VALUE, value);
+        verify(requestBuilder).isSuccessful(eq(response));
+    }
+
+    @Test
+    public void shouldReturnListOnSuccess() throws Exception {
+        BaseSpiceRequest<List<String>> spiceRequest = newSpiceRequestFor(RESULT_GENERIC_TYPE);
+        List<String> value = spiceRequest.loadDataFromNetwork();
+        assertEquals(LIST_VALUE, value);
         verify(requestBuilder).isSuccessful(eq(response));
     }
 
@@ -117,6 +135,20 @@ public class BaseSpiceRequestTest {
 
     private BaseSpiceRequest newSpiceRequestFor(final Class clazz) {
         return new BaseSpiceRequest(clazz, requestBuilder) {
+            @Override
+            public String getResourcePath() {
+                return URL;
+            }
+
+            @Override
+            public HttpRequestFactory getHttpRequestFactory() {
+                return factory;
+            }
+        };
+    }
+
+    private BaseSpiceRequest newSpiceRequestFor(final TypeToken typeToken) {
+        return new BaseSpiceRequest(typeToken, requestBuilder) {
             @Override
             public String getResourcePath() {
                 return URL;

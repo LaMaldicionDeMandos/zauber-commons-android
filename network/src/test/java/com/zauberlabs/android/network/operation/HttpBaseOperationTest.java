@@ -190,7 +190,7 @@ public class HttpBaseOperationTest {
     public void souldCreateRequestWithHeader() throws Exception {
         Map<String, Object> headerValues = new HashMap<String, Object>();
         headerValues.put(HEADER_KEY, HEADER_VALUE);
-        operation = new HttpOperationFactory(BASE_URL).buildGetWithHeader(headerValues);
+        operation = new HttpOperationFactory(BASE_URL, headerValues).buildGet();
         HttpRequest request = operation.buildRequest(PATH, factory);
         Object value = request.getHeaders().get(HEADER_KEY);
         assertNotNull(value);

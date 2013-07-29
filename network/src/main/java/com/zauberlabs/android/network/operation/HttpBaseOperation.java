@@ -9,18 +9,14 @@ import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.HttpStatusCodes;
 import com.google.api.client.http.json.JsonHttpContent;
 import com.google.api.client.json.gson.GsonFactory;
-
-import org.apache.http.Header;
-import org.apache.http.message.BasicHeader;
+import com.google.common.collect.Maps;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Collections;
 import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Created by hernan on 7/11/13.
@@ -67,7 +63,7 @@ public class HttpBaseOperation implements HttpOperation {
     private HttpRequest addHeadersToRequest(HttpRequest request) {
         if (headerValues != null) {
             HttpHeaders headers = request.getHeaders();
-            headers = new HttpHeaders(); //headers != null ? headers : new HttpHeaders();
+            headers = headers != null ? headers : new HttpHeaders();
             headers.putAll(headerValues);
             request.setHeaders(headers);
         }
@@ -75,8 +71,20 @@ public class HttpBaseOperation implements HttpOperation {
     }
 
     @Override
-    public void setHeaders(Map<? extends String, ?> headerValues) {
-        this.headerValues = headerValues;
+    public void addHeaders(Map<? extends String, ?> headerValues) {
+        Map map = getHeaders();
+        map.putAll(headerValues);
+    }
+
+    @Override
+    public <T extends String, K> void addHeader(T name, K value) {
+        Map map = getHeaders();
+        map.put(name, value);
+    }
+
+    private Map<? extends String, ?> getHeaders() {
+        if (headerValues == null) { headerValues = Maps.newHashMap(); }
+        return headerValues;
     }
 
     protected GenericUrl buildGenericURL(String path) throws MalformedURLException {

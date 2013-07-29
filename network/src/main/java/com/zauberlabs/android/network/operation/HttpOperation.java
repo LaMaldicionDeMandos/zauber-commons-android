@@ -14,7 +14,9 @@ public interface HttpOperation {
 
     HttpRequest buildRequest(String path, HttpRequestFactory httpRequestFactory) throws IOException;
 
-    void setHeaders(Map<? extends String, ?> headerValues);
+    void addHeaders(Map<? extends String, ?> headerValues);
+
+    <T extends String, K> void addHeader(T name, K value);
 
     boolean isSuccessful(HttpResponse response);
 }

@@ -9,6 +9,7 @@ import com.zauberlabs.android.network.operation.HttpOperation;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

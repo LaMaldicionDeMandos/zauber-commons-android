@@ -2,6 +2,7 @@ package com.zauberlabs.android.network.operation;
 
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpContent;
+import com.google.api.client.http.HttpHeaders;
 import com.google.api.client.http.HttpMethods;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestFactory;
@@ -49,6 +50,8 @@ public class HttpBaseOperationTest {
     private static final String PATH = "resource";
     private static final String FULL_URL = "http://www.somewhere.far.beyond/resource";
     private static final String FULL_URL_WITH_PARAMS = "http://www.somewhere.far.beyond/resource?key=value";
+    private static final String HEADER_KEY = "user-password";
+    private static final String HEADER_VALUE = "bla:ble";
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
@@ -71,7 +74,10 @@ public class HttpBaseOperationTest {
         parameters.put("key", "value");
         object = mock(Object.class);
 
+        when(request.getHeaders()).thenCallRealMethod();
+        when(request.setHeaders(any(HttpHeaders.class))).thenCallRealMethod();
         when(factory.buildRequest(anyString(), any(GenericUrl.class), any(HttpContent.class))).thenReturn(request);
+
     }
 
     @Test
@@ -178,5 +184,16 @@ public class HttpBaseOperationTest {
         HttpContent content = captor.getValue();
         assertNotNull(content);
         assertThat(content.getType(), containsString("application/json"));
+    }
+
+    @Test
+    public void souldCreateRequestWithHeader() throws Exception {
+        Map<String, Object> headerValues = new HashMap<String, Object>();
+        headerValues.put(HEADER_KEY, HEADER_VALUE);
+        operation = new HttpOperationFactory(BASE_URL).buildGetWithHeader(headerValues);
+        HttpRequest request = operation.buildRequest(PATH, factory);
+        Object value = request.getHeaders().get(HEADER_KEY);
+        assertNotNull(value);
+        assertEquals(HEADER_VALUE, value);
     }
 }

@@ -1,7 +1,5 @@
 package com.zauberlabs.android.image_paginator;
 
-import junit.framework.Assert;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,7 +9,7 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
-import static junit.framework.Assert.assertNotNull;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Created by marcelo on 7/18/13.
@@ -41,11 +39,9 @@ public class ImagePagerAdapterTest {
     }
 
     @Test
-    public void legalUrl() {
-        try {
-            URL url = adapter.getUrl("http://www.example.com/");
-            assertNotNull(url);
-        } catch (MalformedURLException e) {}
+    public void legalUrl() throws MalformedURLException{
+        URL url = adapter.getUrl("http://www.example.com/");
+        assertNotNull(url);
     }
 
 }

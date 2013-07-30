@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/paginator_menu" android:title="@string/paginator_activity" />
+    <item android:id="@+id/vertical_scroll_menu" android:title="@string/vertical_scroll_activity" />
+    <item android:id="@+id/old_vertical_scroll_menu" android:title="@string/vertical_scroll_activity_old" />
+</menu>

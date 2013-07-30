@@ -2,4 +2,7 @@
 <resources>
     <string name="jojo">Hello Example</string>
     <string name="app_name">Examples</string>
+    <string name="paginator_activity">Paginator</string>
+    <string name="vertical_scroll_activity">Vertical Scroll</string>
+    <string name="vertical_scroll_activity_old">Old Vertical Scroll</string>
 </resources>

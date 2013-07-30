@@ -2,12 +2,14 @@ package com.zauberlabs.android.network.operation;
 
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpContent;
+import com.google.api.client.http.HttpHeaders;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestFactory;
 import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.HttpStatusCodes;
 import com.google.api.client.http.json.JsonHttpContent;
 import com.google.api.client.json.gson.GsonFactory;
+import com.google.common.collect.Maps;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -25,6 +27,7 @@ public class HttpBaseOperation implements HttpOperation {
     private final String method;
     private Object payload;
     private Map<? extends String, ?> params;
+    private Map<? extends String, ?> headerValues;
 
     public HttpBaseOperation(String baseUrl, String method) throws MalformedURLException {
         checkArgument(method != null && method.length() > 0, "Http Method must be non empty");
@@ -53,7 +56,35 @@ public class HttpBaseOperation implements HttpOperation {
         }
         HttpRequest request = factory.buildRequest(method, url, content);
         request.setParser(gsonFactory.createJsonObjectParser());
+        addHeadersToRequest(request);
         return request;
+    }
+
+    private HttpRequest addHeadersToRequest(HttpRequest request) {
+        if (headerValues != null) {
+            HttpHeaders headers = request.getHeaders();
+            headers = headers != null ? headers : new HttpHeaders();
+            headers.putAll(headerValues);
+            request.setHeaders(headers);
+        }
+        return request;
+    }
+
+    @Override
+    public void addHeaders(Map<? extends String, ?> headerValues) {
+        Map map = getHeaders();
+        map.putAll(headerValues);
+    }
+
+    @Override
+    public <T extends String, K> void addHeader(T name, K value) {
+        Map map = getHeaders();
+        map.put(name, value);
+    }
+
+    private Map<? extends String, ?> getHeaders() {
+        if (headerValues == null) { headerValues = Maps.newHashMap(); }
+        return headerValues;
     }
 
     protected GenericUrl buildGenericURL(String path) throws MalformedURLException {

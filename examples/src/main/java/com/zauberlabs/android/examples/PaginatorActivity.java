@@ -2,7 +2,6 @@ package com.zauberlabs.android.examples;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.view.PagerAdapter;
 import android.util.Log;
 
 import java.net.MalformedURLException;
@@ -13,7 +12,7 @@ import java.util.List;
 import com.zauberlabs.android.image_paginator.ImagePagerAdapter;
 import com.zauberlabs.android.image_paginator.ImagePaginator;
 
-public class HelloAndroidActivity extends FragmentActivity {
+public class PaginatorActivity extends FragmentActivity {
 
     private static String TAG = "examples";
 
@@ -27,7 +26,7 @@ public class HelloAndroidActivity extends FragmentActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 		Log.i(TAG, "onCreate");
-        setContentView(R.layout.main);
+        setContentView(R.layout.paginator);
         List<String> urls = Arrays.asList(
                 "https://github.com/Proyecto-UTN-2012/Proyecto-UTN-2012/blob/master/integrar-t-android/res/drawable/cali1.png?raw=true",
                 "https://github.com/Proyecto-UTN-2012/Proyecto-UTN-2012/blob/master/integrar-t-android/res/drawable/cali2.png?raw=true",

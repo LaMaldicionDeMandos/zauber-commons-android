@@ -30,10 +30,10 @@ public class MainActivity extends FragmentActivity {
                 intent = new Intent(this, PaginatorActivity.class);
                 break;
             case R.id.vertical_scroll_menu:
-                intent = new Intent(this, PaginatorActivity.class);
+                intent = new Intent(this, VerticalScrollActivity.class);
                 break;
             case R.id.old_vertical_scroll_menu:
-                intent = new Intent(this, PaginatorActivity.class);
+                intent = new Intent(this, OldVerticalScrollActivity.class);
                 break;
             default:
                 return super.onOptionsItemSelected(item);

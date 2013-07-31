@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:paginator="http://schemas.android.com/apk/res/com.zauberlabs.android.examples"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <com.zauberlabs.android.image_paginator.ImagePaginator
+                android:id="@+id/paginator1"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                paginator:placeholder="@drawable/icon"
+                />
+        <Button
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:text="Boton"
+                />
+    </LinearLayout>
+</ScrollView>

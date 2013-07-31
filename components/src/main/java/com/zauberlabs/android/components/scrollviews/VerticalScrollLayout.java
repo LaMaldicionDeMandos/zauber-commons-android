@@ -1,4 +1,4 @@
-package com.zauberlabs.android.examples;
+package com.zauberlabs.android.components.scrollviews;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -6,11 +6,15 @@ import android.view.MotionEvent;
 import android.widget.ScrollView;
 
 /**
- * Created by marcelo on 7/30/13.
+ * Created by marcelo on 7/31/13.
  */
 public class VerticalScrollLayout extends ScrollView {
 
     private float xDistance, yDistance, lastX, lastY;
+
+    public VerticalScrollLayout(final Context context) {
+        super(context);
+    }
 
     public VerticalScrollLayout(final Context context, final AttributeSet attrs) {
         super(context, attrs);

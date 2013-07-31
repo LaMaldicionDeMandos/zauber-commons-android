@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.zauberlabs.android.examples.VerticalScrollLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.zauberlabs.android.components.scrollviews.VerticalScrollLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:paginator="http://schemas.android.com/apk/res/com.zauberlabs.android.examples"
               android:orientation="vertical"
               android:layout_width="match_parent"
@@ -20,4 +20,4 @@
                 android:text="Boton"
                 />
     </LinearLayout>
-</com.zauberlabs.android.examples.VerticalScrollLayout>
+</com.zauberlabs.android.components.scrollviews.VerticalScrollLayout>

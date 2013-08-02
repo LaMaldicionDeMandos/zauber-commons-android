@@ -1,22 +1,21 @@
 package com.zauberlabs.android.image_paginator;
 
-import junit.framework.Assert;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
-import static junit.framework.Assert.assertNotNull;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Created by marcelo on 7/18/13.
  */
-@RunWith(PaginatorTestRunner.class)
+@RunWith(RobolectricTestRunner.class)
 public class ImagePagerAdapterTest {
     private ImagePagerAdapter<String> adapter;
 

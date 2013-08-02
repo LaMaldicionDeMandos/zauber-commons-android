@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -16,6 +17,7 @@ import static org.junit.Assert.assertNotNull;
  * Created by marcelo on 7/18/13.
  */
 @RunWith(RobolectricTestRunner.class)
+@Config(manifest = Config.NONE)
 public class ImagePagerAdapterTest {
     private ImagePagerAdapter<String> adapter;
 

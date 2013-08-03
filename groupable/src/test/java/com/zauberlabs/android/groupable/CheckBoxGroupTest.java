@@ -7,15 +7,20 @@ import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
+import org.robolectric.shadows.ShadowContext;
+import org.robolectric.shadows.ShadowContextImpl;
 
+import android.app.Activity;
 import android.widget.CheckBox;
 
-@RunWith(GroupableTestRunner.class)
 public class CheckBoxGroupTest extends AbstractGroupableTest<CheckBoxGroup, CheckBox> {
 
     @Override
     protected CheckBoxGroup newGroupable() {
-        return new CheckBoxGroup(null);
+        return new CheckBoxGroup(Robolectric.getShadowApplication().getApplicationContext());
     }
 
     @Test

@@ -1,6 +1,16 @@
 package com.zauberlabs.android.groupable;
 
 
+import android.widget.CompoundButton;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
+
+import java.util.List;
+
 import static com.google.common.collect.Lists.newArrayList;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertFalse;
@@ -8,15 +18,8 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import java.util.List;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import android.widget.CompoundButton;
-
-@RunWith(GroupableTestRunner.class)
+@RunWith(RobolectricTestRunner.class)
+@Config(manifest=Config.NONE)
 public abstract class AbstractGroupableTest<G extends Groupable<T>, T extends CompoundButton> {
     protected G groupable;
 

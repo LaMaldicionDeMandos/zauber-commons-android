@@ -7,14 +7,16 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
+import org.robolectric.RobolectricTestRunner;
 
 import android.widget.RadioButton;
 
-@RunWith(GroupableTestRunner.class)
+@RunWith(RobolectricTestRunner.class)
 public class RadioGroupTest extends AbstractGroupableTest<RadioGroup, android.widget.RadioButton>{
     @Override
     protected RadioGroup newGroupable() {
-        return groupable = new RadioGroup(null);
+        return groupable = new RadioGroup(Robolectric.getShadowApplication().getApplicationContext());
     }
 
     @Test

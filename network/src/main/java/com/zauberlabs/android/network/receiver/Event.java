@@ -5,8 +5,6 @@ package com.zauberlabs.android.network.receiver;
  */
 public interface Event {
 
-    Class getPayloadClass();
-
     String getName();
 
 }

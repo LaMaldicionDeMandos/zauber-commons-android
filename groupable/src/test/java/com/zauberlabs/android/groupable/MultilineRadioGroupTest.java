@@ -1,32 +1,24 @@
 package com.zauberlabs.android.groupable;
 
+import android.widget.CheckBox;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
+
+import java.util.List;
+
 import static com.google.common.collect.Lists.newArrayList;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
-
-import java.util.List;
-
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.Robolectric;
-import org.robolectric.RobolectricTestRunner;
-
-import android.widget.CheckBox;
 
 @RunWith(RobolectricTestRunner.class)
-@Ignore
+@Config(manifest = Config.DEFAULT)
 public class MultilineRadioGroupTest extends AbstractGroupableTest<MultilineRadioGroup, CheckBox> {
-    @Override
-    public void setUp() {
-        super.setUp();
-        groupable = spy(groupable);
-        when(groupable.getBulletsPerGroup()).thenReturn(5);
-    }
 
     @Override
     protected MultilineRadioGroup newGroupable() {
@@ -59,24 +51,40 @@ public class MultilineRadioGroupTest extends AbstractGroupableTest<MultilineRadi
              "Bar2",
              "Bazz2",
              "Foo3",
-             "Bar3");
+             "Foo4",
+             "Foo5",
+             "Foo6",
+             "Foo7",
+             "Foo8",
+             "Foo9",
+             "Foo10",
+             "Foo11",
+             "Foo12",
+             "Foo13",
+             "Foo14",
+             "Foo15",
+             "Foo16",
+             "Foo17",
+             "Foo18",
+             "Foo19",
+             "Ba20");
         groupable.populate(items, new StringPredicate());
-        assertThat(groupable.size(), is(8));
+        assertThat(groupable.size(), is(24));
         final List<CheckBoxGroup> radioGroupList = groupable.getcheckBoxGroupList();
         assertThat(radioGroupList.size(), is(2));
         final CheckBoxGroup radioGroup1 = radioGroupList.get(0);
-        assertThat(radioGroup1.size(), is(5));
+        assertThat(radioGroup1.size(), is(20));
         CheckBox radioButton = radioGroup1.findWithTag("Foo2");
         assertNotNull(radioButton);
         assertThat((String) radioButton.getTag(), is("Foo2"));
         assertThat(radioButton.getText().toString(), is("Foo2"));
         assertFalse(radioButton.isChecked());
         final CheckBoxGroup radioGroup2 = radioGroupList.get(1);
-        assertThat(radioGroup2.size(), is(3));
-        radioButton = radioGroup2.findWithTag("Bar3");
+        assertThat(radioGroup2.size(), is(4));
+        radioButton = radioGroup2.findWithTag("Ba20");
         assertNotNull(radioButton);
-        assertThat((String) radioButton.getTag(), is("Bar3"));
-        assertThat(radioButton.getText().toString(), is("Bar3"));
+        assertThat((String) radioButton.getTag(), is("Ba20"));
+        assertThat(radioButton.getText().toString(), is("Ba20"));
         assertFalse(radioButton.isChecked());
     }
 

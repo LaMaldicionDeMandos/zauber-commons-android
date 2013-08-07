@@ -4,10 +4,9 @@
     package="com.zauberlabs.android.groupable"
     android:versionCode="1000001"
     android:versionName="1.0.1-TEST" >
-
     <uses-sdk
         android:minSdkVersion="8"
-        android:targetSdkVersion="15"
+        android:targetSdkVersion="8"
         tools:ignore="OldTargetApi" />
 
 </manifest>

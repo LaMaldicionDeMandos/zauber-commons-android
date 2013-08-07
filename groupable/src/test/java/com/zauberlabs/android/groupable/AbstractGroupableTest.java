@@ -19,13 +19,11 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(manifest=Config.NONE)
+@Config(manifest=Config.DEFAULT)
 public abstract class AbstractGroupableTest<G extends Groupable<T>, T extends CompoundButton> {
     protected G groupable;
-
     @Before
     public void setUp() {
-
         groupable = newGroupable();
     }
 
